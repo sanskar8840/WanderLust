@@ -1,0 +1,359 @@
+<!-- <% layout('/layouts/boilerplate') %>
+  <body>
+    <h3>Listing Details :</h3>
+    <ul>
+      <li><%= listing.title %></li>
+      <li><%= listing.description %></li>
+      <li>&#8377; <%= listing.price.toLocaleString("en-IN") %></li>
+      <li><%= listing.location %></li>
+      <li><%= listing.country %></li>
+    </ul>
+    <br />
+    <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a>
+    <br /><br />
+    <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+      <button>Delete this listing</button>
+    </form>
+  </body> -->
+<% layout("/layouts/boilerplate") %>
+
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8 col-md-10 col-sm-12">
+
+                <!-- Heading -->
+                <h3 class="mb-3">
+                    <%= listing.title %>
+                </h3>
+
+                <!-- Listing Card -->
+                <div class="card listing-card show-card">
+
+                    <img
+                        src="<%= listing.image.url %>"
+                        class="card-img-top show-img"
+                        alt="listing-image"
+                    >
+
+                    <div class="card-body">
+
+                        <p class="card-text"> Owned by ->  <i><%= listing.owner.username%></i></p>
+
+                        <!-- Description -->
+                        <p class="card-text">
+                            <strong>Description :</strong><br>
+                            <%= listing.description %>
+                        </p>
+
+                        <!-- Price -->
+                        <p class="card-text">
+                            <strong>Price :</strong>
+                            &#8377;
+                            <%= listing.price.toLocaleString("en-IN") %>
+                        </p>
+
+                        <!-- Location -->
+                        <p class="card-text">
+                            <strong>Location :</strong>
+                            <%= listing.location %>
+                        </p>
+
+                        <!-- Country -->
+                        <p class="card-text">
+                            <strong>Country :</strong>
+                            <%= listing.country %>
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-3 d-flex gap-2">
+
+                    <a
+                        href="/listings/<%= listing._id %>/edit"
+                        class="btn btn-dark"
+                    >
+                        Edit Listing
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="/listings/<%= listing._id %>?_method=DELETE"
+                    >
+
+                        <button
+                            class="btn btn-danger"
+                        >
+                            Delete Listing
+                        </button>
+
+                    </form>
+
+                </div>
+                <!-- // review Sestion -->
+                <div class="col-8 offset-3 mb-3" >
+                    <hr />
+                    <h4>Leave a Review</h4>
+                    <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
+                        <div class="mb-3 mt-3">
+                            <label for="rating" class="form-lebel">Rating</label>
+                            <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range"/>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label for="comment" class="form-lebel">Comments</label>
+                            <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+                            <div class="invalid-feedback">Please sumbit some comment for Review</div>
+                        </div>
+                        <button class="btn btn-outline-dark">sunbit</button>
+                    </form>
+                </div>
+                <p><b>All Reviews</b></p>
+
+<div class="row">
+  <% for(review of listing.reviews) { %>
+
+    <div class="card col-5 ms-3 mb-3">
+      <div class="card-body">
+
+        <h5 class="card-title">Jane Doe</h5>
+
+        <p class="card-text">
+          <%= review.comment %>
+        </p>
+
+        <p class="card-text">
+          <%= review.rating %> stars
+        </p>
+
+      </div>
+      <form action="/listings/<%=listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-3" method="post">
+        <button class="btn btn-sm btn-dark">DELETE</button>
+      </form>
+    </div>
+
+  <% } %>
+</div>
+
+                <hr class="my-4">
+                <!-- ==========================
+                     What this place offers
+                ========================== -->
+
+                <div class="mt-4">
+                    <h4>What this place offers</h4>
+
+                    <div class="offers">
+
+                        <i class="ri-restaurant-line">
+                            <span> Kitchen</span>
+                        </i>
+
+                        <i class="ri-car-fill">
+                            <span> Parking</span>
+                        </i>
+
+                        <i class="ri-t-shirt-air-fill">
+                            <span> Air Conditioning</span>
+                        </i>
+
+                        <i class="ri-tv-2-line">
+                            <span> TV</span>
+                        </i>
+
+                        <i class="ri-vidicon-line">
+                            <span> Security Cameras</span>
+                        </i>
+
+                        <i class="ri-wifi-line">
+                            <span> Wifi</span>
+                        </i>
+
+                    </div>
+
+                    <div class="text-center mt-3">
+
+                        <button
+                            class="btn btn-dark"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                        >
+                            Show all amenities
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- ==========================
+                     Amenities Modal
+                ========================== -->
+
+                <div
+                    class="modal fade"
+                    id="exampleModal"
+                    tabindex="-1"
+                    aria-hidden="true"
+                >
+
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+
+                                <h5 class="modal-title">
+                                    What this place offers
+                                </h5>
+
+                                <button
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                ></button>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <h5>Scenic Views</h5>
+
+                                <ul>
+                                    <li>Lake View</li>
+                                    <li>Mountain View</li>
+                                    <li>Pool View</li>
+                                </ul>
+
+                                <hr>
+
+                                <h5>Bathroom</h5>
+
+                                <ul>
+                                    <li>Cleaning Products</li>
+                                    <li>Shampoo</li>
+                                    <li>Hot Water</li>
+                                </ul>
+
+                                <hr>
+
+                                <h5>Bedroom</h5>
+
+                                <ul>
+                                    <li>Essentials</li>
+                                    <li>Hangers</li>
+                                    <li>Bed Linen</li>
+                                </ul>
+
+                                <hr>
+
+                                <h5>Entertainment</h5>
+
+                                <ul>
+                                    <li>TV</li>
+                                    <li>Bluetooth Speaker</li>
+                                    <li>Pool Table</li>
+                                </ul>
+
+                                <hr>
+
+                                <h5>Outdoor</h5>
+
+                                <ul>
+                                    <li>Garden</li>
+                                    <li>Patio</li>
+                                    <li>Fire Pit</li>
+                                    <li>BBQ Grill</li>
+                                </ul>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button
+                                    class="btn btn-danger"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Close
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+                  <!-- ==========================
+                     Add-on Services
+                ========================== -->
+
+                <div class="mt-4">
+
+                    <h4>Add-on Services</h4>
+
+                    <p>
+                        After booking this home, a trip designer can arrange
+                        any of these add-on services.
+                    </p>
+
+                    <div class="offers">
+
+                        <i class="ri-flight-takeoff-fill">
+                            <span> Airport Transfer</span>
+                        </i>
+
+                        <i class="ri-goblet-line">
+                            <span> Butler</span>
+                        </i>
+
+                        <i class="ri-luggage-cart-fill">
+                            <span> Pre-stocking</span>
+                        </i>
+
+                        <i class="ri-hand-sanitizer-fill">
+                            <span> Cleaning</span>
+                        </i>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <!-- ==========================
+                     Location
+                ========================== -->
+
+                <div class="mt-4 mb-5">
+
+                    <h4>Location</h4>
+
+                    <div class="card shadow-sm">
+
+                        <div class="card-body">
+
+                            <p class="mb-2">
+                                <strong>City :</strong>
+                                <%= listing.location %>
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Country :</strong>
+                                <%= listing.country %>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
